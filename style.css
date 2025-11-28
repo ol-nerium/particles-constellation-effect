@@ -16,7 +16,7 @@ body {
 
   background: black;
 
-  filter: blur(7px) contrast(20);
+  /* filter: blur(7px) contrast(20); */
 }
 
 #stars_sprite {
