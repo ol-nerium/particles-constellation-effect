@@ -18,7 +18,7 @@ class Particle {
     this.effect = effect;
     this.radius = Math.floor(Math.random() * 8 + 8);
     this.minRadius = this.radius;
-    this.maxRadius = this.radius * 5;
+    this.maxRadius = this.radius * 7;
     this.x =
       this.radius + Math.random() * (this.effect.width - this.radius * 2);
     this.y =
@@ -59,6 +59,9 @@ class Particle {
       if (distance < this.effect.mouse.radius && this.radius < this.maxRadius) {
         this.radius += 2;
       }
+    }
+    if (this.radius > this.minRadius) {
+      this.radius -= 0.5;
     }
 
     if (this.x < this.radius) {
