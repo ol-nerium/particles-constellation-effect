@@ -29,16 +29,16 @@ class Particle {
     this.friction = 0.8;
   }
   draw(context) {
-    // if (this.index % 50) {
-    //   // "sunrise" style effect
-    //   context.save();
-    //   context.globalAlpha = 0.6;
-    //   context.beginPath();
-    //   context.moveTo(this.x, this.y);
-    //   context.lineTo(this.effect.mouse.x, this.effect.mouse.y);
-    //   context.stroke();
-    //   context.restore();
-    // }
+    if (this.index % 50) {
+      // "sunrise" style effect
+      context.save();
+      context.globalAlpha = 0.6;
+      context.beginPath();
+      context.moveTo(this.x, this.y);
+      context.lineTo(this.effect.mouse.x, this.effect.mouse.y);
+      context.stroke();
+      context.restore();
+    }
     context.beginPath();
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     context.fill();
