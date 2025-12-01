@@ -1,1 +1,1 @@
-# particles-constellation-effect
+# particles-creative-coding-effects
