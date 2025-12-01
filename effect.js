@@ -1,5 +1,4 @@
 import Particle from "./particle.js";
-import { ctx } from "./script.js";
 
 export default class Effect {
   constructor(canvas, context) {
@@ -20,25 +19,15 @@ export default class Effect {
       width: captionRect.width,
       height: captionRect.height,
     };
-    this.maxDistance = 100;
+    this.maxDistance = 80;
     this.createParticles();
 
     this.debug = false;
-
-    // this.mouse = {
-    //   x: 0,
-    //   y: 0,
-    //   pressed: false,
-    //   radius: 200,
-    // };
 
     this.gradient = this.context.createLinearGradient(0, 0, 0, canvas.height); // x0 y0 x1 y1
     this.gradient.addColorStop(0, "red");
     this.gradient.addColorStop(0.5, "magenta");
     this.gradient.addColorStop(1, "pink");
-
-    // ctx.fillStyle = this.gradient;
-    // ctx.strokeStyle = this.gradient;
 
     window.addEventListener("keydown", (e) => {
       if (e.key === "d") {
@@ -49,20 +38,6 @@ export default class Effect {
     window.addEventListener("resize", () => {
       this.resize(window.innerWidth, window.innerHeight);
     });
-    // window.addEventListener("mousemove", (e) => {
-    //   if (this.mouse.pressed) {
-    //     this.mouse.x = e.x;
-    //     this.mouse.y = e.y;
-    //   }
-    // });
-    // window.addEventListener("mousedown", (e) => {
-    //   this.mouse.pressed = true;
-    //   this.mouse.x = e.x;
-    //   this.mouse.y = e.y;
-    // });
-    // window.addEventListener("mouseup", (e) => {
-    //   this.mouse.pressed = false;
-    // });
   }
 
   createParticles() {
@@ -111,12 +86,11 @@ export default class Effect {
   }
   //
   resize(width, height) {
+    // resize event resets context to its default, return defaults:
     this.canvas.width = width;
     this.canvas.height = height;
     this.width = width;
     this.height = height;
-    // resize event resets context to its default so:
-    // this.element = document.getElementById("caption").getBoundingClientRect();
     this.canvasRect = this.canvas.getBoundingClientRect();
     this.captionRect = document
       .getElementById("caption")

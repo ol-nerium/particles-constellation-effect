@@ -3,10 +3,11 @@ export default class Particle {
     this.effect = effect;
     this.radius = Math.floor(Math.random() * 7 + 3);
 
-    this.x = this.effect.width / 2;
+    this.x = this.effect.element.x + Math.random() * this.effect.element.width;
+
     this.y = -Math.random() * this.effect.height * 0.5;
 
-    this.vx = Math.random() * -2;
+    this.vx = Math.random() * 2 - 1;
     this.vy = 0;
     this.gravity = this.radius * 0.001;
     this.friction = 0.8;
@@ -57,19 +58,18 @@ export default class Particle {
       this.x + this.radius > this.effect.element.x &&
       this.y - this.radius < this.effect.element.y + 5 &&
       this.y + this.radius > this.effect.element.y &&
-      this.bounced < 2
+      this.bounced < 10
     ) {
       //collision detected!
+      this.vx *= 1.5;
       this.vy *= -0.5;
       this.y = this.effect.element.y - this.radius;
       this.bounced += 1;
-      // this.vx *= -1.5;
     }
   }
 
   reset() {
-    this.x =
-      this.radius + Math.random() * (this.effect.width - this.radius * 2);
+    this.x = this.effect.element.x + Math.random() * this.effect.element.width;
     this.y =
       -this.radius -
       this.effect.maxDistance -
@@ -77,6 +77,6 @@ export default class Particle {
     this.bounced = 0;
 
     this.vy = 0;
-    this.vx = Math.random() * -2;
+    this.vx = Math.random() * 2 - 1;
   }
 }
