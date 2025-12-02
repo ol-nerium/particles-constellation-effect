@@ -1,0 +1,98 @@
+import Particle from "./particle.js";
+
+export default class Effect {
+  constructor(canvas, context) {
+    this.canvas = canvas;
+    this.context = context;
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
+    this.particles = [];
+    this.numberOfParticles = 220;
+    this.createParticles();
+
+    this.mouse = {
+      x: this.width / 2,
+      y: this.height / 2,
+      pressed: false,
+      radius: 120,
+    };
+    window.addEventListener("resize", (e) => {
+      // console.log(e);
+      this.resize(e.target.window.innerWidth, e.target.window.innerHeight);
+    });
+    window.addEventListener("mousemove", (e) => {
+      // console.log(e.x, e.y);
+      if (this.mouse.pressed) {
+        this.mouse.x = e.x;
+        this.mouse.y = e.y;
+        // console.log(this.mouse);
+      }
+    });
+    window.addEventListener("mousedown", (e) => {
+      this.mouse.pressed = true;
+      this.mouse.x = e.x;
+      this.mouse.y = e.y;
+    });
+    window.addEventListener("mouseup", (e) => {
+      this.mouse.pressed = false;
+    });
+  }
+
+  createParticles() {
+    for (let i = 0; i < this.numberOfParticles; i += 1) {
+      this.particles.push(new Particle(this, i));
+    }
+  }
+
+  handleParticles(context) {
+    this.connectParticles(context);
+    this.particles.forEach((particle) => {
+      particle.draw(context);
+      particle.update();
+    });
+  }
+
+  connectParticles(context) {
+    const maxDistance = 100;
+    for (let a = 0; a < this.particles.length; a += 1) {
+      for (let b = a; b < this.particles.length; b += 1) {
+        const dx = this.particles[a].x - this.particles[b].x;
+        const dy = this.particles[a].y - this.particles[b].y;
+        // const distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.hypot(dx, dy); // same
+        if (distance < maxDistance) {
+          context.save();
+          const opacity = 1 - distance / maxDistance;
+          context.globalAlpha = opacity;
+          context.beginPath();
+          context.moveTo(this.particles[a].x, this.particles[a].y);
+          context.lineTo(this.particles[b].x, this.particles[b].y);
+          context.stroke();
+          context.restore();
+        }
+      }
+    }
+  }
+  //
+  resize(width, height) {
+    this.canvas.width = width;
+    this.canvas.height = height;
+    this.width = width;
+    this.height = height;
+
+    // resize event resets context to its default so:
+    const gradient = this.context.createLinearGradient(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    ); // x0 y0 x1 y1
+    gradient.addColorStop(0, "pink");
+    gradient.addColorStop(0.5, "red");
+    gradient.addColorStop(1, "magenta");
+    this.context.fillStyle = gradient;
+    this.context.strokeStyle = gradient;
+
+    this.particles.forEach((particle) => particle.reset());
+  }
+}
