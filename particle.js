@@ -61,8 +61,8 @@ export default class Particle {
       this.bounced < 10
     ) {
       //collision detected!
-      this.vx *= 1.5;
-      this.vy *= -0.5;
+      this.vx *= 1.3;
+      this.vy *= -0.3;
       this.y = this.effect.element.y - this.radius;
       this.bounced += 1;
     }

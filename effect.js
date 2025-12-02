@@ -7,7 +7,7 @@ export default class Effect {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.particles = [];
-    this.numberOfParticles = 250;
+    this.numberOfParticles = 300;
 
     const canvasRect = this.canvas.getBoundingClientRect();
     const captionRect = document
@@ -101,11 +101,6 @@ export default class Effect {
       width: this.captionRect.width,
       height: this.captionRect.height,
     };
-
-    // this.gradient = this.context.createLinearGradient(0, 0, width, height); // x0 y0 x1 y1
-    // this.gradient.addColorStop(0, "red");
-    // this.gradient.addColorStop(0.5, "white");
-    // this.gradient.addColorStop(1, "pink");
 
     this.particles.forEach((particle) => particle.reset());
   }
