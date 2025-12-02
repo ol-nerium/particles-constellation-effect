@@ -5,8 +5,16 @@
 }
 
 #canvas1 {
-  background: linear-gradient(darkblue, lightblue);
+  background: linear-gradient(#231646, #4d0941);
   position: absolute;
   top: 0;
   left: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+img {
+  display: none;
 }
