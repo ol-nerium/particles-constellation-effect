@@ -7,13 +7,13 @@ export default class Particle {
     this.halfImageSize = this.imageSize / 2;
     this.x = Math.random() * (this.effect.width + this.effect.maxDistance * 2);
     this.y = Math.random() * this.effect.height;
-    this.vx = -1.5;
+    this.vx = -5.5;
     this.vy = 0;
     this.initialYPosition = this.y;
 
     this.pushX = 0;
     this.pushY = 0;
-    this.friction = 0.99;
+    this.friction = 0.8;
     this.image = document.getElementById("star");
   }
   draw(context) {
@@ -37,37 +37,69 @@ export default class Particle {
       this.pushX += Math.cos(angle) * force;
     }
 
-    this.x += (this.pushX *= this.friction) + this.vx;
-    this.y += (this.pushY *= this.friction) + this.vy;
-
     if (this.x < -this.imageSize - this.effect.maxDistance) {
       this.x = this.effect.width + this.imageSize + this.effect.maxDistance;
     }
 
-    if (this.y < -this.halfImageSize) {
-      this.y = this.effect.height + this.halfImageSize;
-      this.x = Math.random() * this.effect.width;
+    // if (this.y < this.halfImageSize) {
+    // this.y = this.effect.height + this.halfImageSize;
+    // this.y = this.effect.height - this.halfImageSize;
+    // this.x = Math.random() * this.effect.width;
+    // }
+    // if (this.y > this.effect.height - this.halfImageSize) {
+    // this.y = -this.halfImageSize;
+    // this.y = this.halfImageSize;
+    // this.x = Math.random() * this.effect.width;
+    // }
+    let flowSpeed = 0.005;
+    // this.vy = 0;
+
+    if (this.x < this.effect.whale.x - this.effect.whale.spriteWidth / 2) {
+      // if (this.y > this.initialYPosition) {
+      //   if (this.y - this.initialYPosition < 0.1 * distance) {
+      //     this.vy = 0;
+      //   } else this.vy = -0.1 * distance;
+      // }
+      // if (this.y < this.initialYPosition) {
+      //   if (this.initialYPosition - this.y < 0.1 * distance) {
+      //     this.vy = 0;
+      //   } else this.vy = 0.1 * distance;
+      // }
+
+      if (
+        (this.y > this.initialYPosition &&
+          this.y < flowSpeed * distance + this.initialYPosition) ||
+        (this.y < this.initialYPosition &&
+          this.y > flowSpeed * distance + this.initialYPosition)
+      ) {
+        this.vy = 0;
+      }
+
+      //
+      if (
+        this.y > this.initialYPosition &&
+        this.y - this.initialYPosition > flowSpeed * distance
+      ) {
+        this.vy = -flowSpeed * distance;
+      }
+      //
+      if (
+        this.y < this.initialYPosition &&
+        this.initialYPosition - this.y > flowSpeed * distance
+      ) {
+        this.vy = flowSpeed * distance;
+      }
+      //
     }
-    if (this.y > this.effect.height + this.halfImageSize) {
-      this.y = -this.halfImageSize;
-      this.x = Math.random() * this.effect.width;
-    }
 
-    if (this.y < this.initialYPosition)
-      this.vy = (Math.random() / 100) * this.imageSize;
-
-    if (this.y > this.initialYPosition)
-      this.vy = -(Math.random() / 100) * this.imageSize;
-
-    if (
-      this.y < this.initialYPosition * 0.98 &&
-      this.y < this.initialYPosition * 0.98
-    )
-      this.vy = 0;
+    this.x += (this.pushX *= this.friction) + this.vx;
+    this.y += (this.pushY *= this.friction) + this.vy;
   }
 
   reset() {
     this.x = Math.random() * (this.effect.width + this.effect.maxDistance * 2);
     this.y = Math.random() * this.effect.height;
+    this.initialYPosition = this.y;
+    //
   }
 }

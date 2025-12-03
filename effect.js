@@ -8,8 +8,8 @@ export default class Effect {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.particles = [];
-    this.numberOfParticles = 300;
-    this.maxDistance = 110;
+    this.numberOfParticles = 150;
+    this.maxDistance = 210;
     this.createParticles();
     this.whale = new Whale(this);
 

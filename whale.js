@@ -7,6 +7,7 @@ export default class Whale {
     this.angle = 0;
     this.va = 0.01;
     this.curve = this.effect.height * 0.35;
+    // this.curve = this.effect.height * 0;
     this.spriteWidth = 420;
     this.spriteHeight = 285;
     this.frameX = 0;
@@ -14,7 +15,7 @@ export default class Whale {
     this.maxFrame = 38;
     this.frameTimer = 0;
     this.frameInterval = 1000 / 60;
-    this.radius = 200;
+    this.radius = 250;
   }
 
   draw(context) {
