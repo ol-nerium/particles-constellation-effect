@@ -4,19 +4,32 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // x0 y0 x1 y1
-gradient.addColorStop(0, "white");
-gradient.addColorStop(0.5, "gold");
-gradient.addColorStop(1, "orangered");
+const canvas2 = document.getElementById("canvas2");
+const ctx2 = canvas2.getContext("2d");
+canvas2.width = window.innerWidth;
+canvas2.height = window.innerHeight;
 
-ctx.fillStyle = gradient;
-ctx.strokeStyle = gradient;
+const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height); // x0 y0 x1 y1
+gradient.addColorStop(0, "black");
+gradient.addColorStop(0.5, "black");
+gradient.addColorStop(0.5, "white");
+gradient.addColorStop(1, "white");
+
+ctx.fillStyle = "blue";
+ctx.strokeStyle = "white";
+ctx2.fillStyle = "blue";
+ctx2.strokeStyle = "white";
 
 class Particle {
   constructor(effect, index) {
-    this.index = index;
     this.effect = effect;
-    this.radius = Math.floor(Math.random() * 10 + 1);
+    this.index = index;
+
+    if (!this.index % 20) {
+      this.radius = Math.floor(Math.random() * 20 + 50);
+    } else this.radius = Math.floor(Math.random() * 30 + 5);
+
+    this.radius = Math.floor(Math.random() * 30 + 5);
 
     this.x =
       this.radius + Math.random() * (this.effect.width - this.radius * 2);
@@ -33,6 +46,7 @@ class Particle {
     context.beginPath();
     context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
     context.fill();
+    context.stroke();
   }
 
   update() {
@@ -67,6 +81,22 @@ class Particle {
       this.y = this.effect.height - this.radius;
       this.vy *= -1;
     }
+
+    //collision with other particles
+    this.effect.particles.forEach((particle) => {
+      if (particle.index != this.index) {
+        const dx = this.x - particle.x;
+        const dy = this.y - particle.y;
+        const distance = Math.hypot(dx, dy);
+        const sumOfRadii = this.radius + particle.radius;
+        if (distance <= sumOfRadii) {
+          const unit_x = dx / distance;
+          const unit_y = dy / distance;
+          this.x = particle.x + (sumOfRadii + 0.1) * unit_x;
+          this.y = particle.y + (sumOfRadii + 0.1) * unit_y;
+        }
+      }
+    });
   }
 
   reset() {
@@ -84,14 +114,14 @@ class Effect {
     this.width = this.canvas.width;
     this.height = this.canvas.height;
     this.particles = [];
-    this.numberOfParticles = Math.floor(Math.random() * 200 + 400);
+    this.numberOfParticles = 20;
     this.createParticles();
 
     this.mouse = {
       x: 0,
       y: 0,
       pressed: false,
-      radius: 200,
+      radius: 100,
     };
 
     window.addEventListener("resize", (e) => {
@@ -119,10 +149,11 @@ class Effect {
     }
   }
 
-  handleParticles(context) {
-    this.connectParticles(context);
+  handleParticles(context, context2) {
+    // this.connectParticles(context2);
     this.particles.forEach((particle) => {
       particle.draw(context);
+      particle.draw(context2);
       particle.update();
     });
   }
@@ -139,6 +170,7 @@ class Effect {
           context.save();
           const opacity = 1 - distance / maxDistance;
           context.globalAlpha = opacity;
+          context.lineWidth = 3;
           context.beginPath();
           context.moveTo(this.particles[a].x, this.particles[a].y);
           context.lineTo(this.particles[b].x, this.particles[b].y);
@@ -170,7 +202,8 @@ const effect = new Effect(canvas, ctx);
 
 function animate() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  effect.handleParticles(ctx);
+  ctx2.clearRect(0, 0, canvas.width, canvas.height);
+  effect.handleParticles(ctx, ctx2);
   requestAnimationFrame(animate);
 }
 animate();
