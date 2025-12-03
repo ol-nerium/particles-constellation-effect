@@ -6,7 +6,7 @@ export default class Whale {
     this.image = document.getElementById("whale3");
     this.angle = 0;
     this.va = 0.01;
-    this.curve = this.effect.height * 0.25;
+    this.curve = this.effect.height * 0.35;
     this.spriteWidth = 420;
     this.spriteHeight = 285;
     this.frameX = 0;

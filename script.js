@@ -16,6 +16,8 @@ window.addEventListener("load", () => {
     const deltaTime = timeStamp - lastTime;
     lastTime = timeStamp;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // ctx.fillStyle = "rgba(0,0,0,0.05)";
+    // ctx.fillRect(0, 0, canvas.width, canvas.height); // move to another canvas for effect maybe
     effect.handleParticles(ctx, deltaTime);
     requestAnimationFrame(animate);
   }

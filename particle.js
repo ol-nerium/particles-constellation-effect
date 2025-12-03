@@ -3,11 +3,13 @@ export default class Particle {
     this.index = index;
     this.effect = effect;
     this.radius = Math.floor(Math.random() * 6 + 1);
-    this.imageSize = this.radius * 8;
+    this.imageSize = Math.floor(Math.random() * 6 + 8) * this.radius;
     this.halfImageSize = this.imageSize / 2;
     this.x = Math.random() * (this.effect.width + this.effect.maxDistance * 2);
     this.y = Math.random() * this.effect.height;
     this.vx = -1.5;
+    this.vy = 0;
+    this.initialYPosition = this.y;
 
     this.pushX = 0;
     this.pushY = 0;
@@ -15,9 +17,6 @@ export default class Particle {
     this.image = document.getElementById("star");
   }
   draw(context) {
-    // context.beginPath();
-    // context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    // context.fill();
     context.drawImage(
       this.image,
       this.x - this.halfImageSize,
@@ -39,11 +38,32 @@ export default class Particle {
     }
 
     this.x += (this.pushX *= this.friction) + this.vx;
-    this.y += this.pushY *= this.friction;
+    this.y += (this.pushY *= this.friction) + this.vy;
 
     if (this.x < -this.imageSize - this.effect.maxDistance) {
       this.x = this.effect.width + this.imageSize + this.effect.maxDistance;
     }
+
+    if (this.y < -this.halfImageSize) {
+      this.y = this.effect.height + this.halfImageSize;
+      this.x = Math.random() * this.effect.width;
+    }
+    if (this.y > this.effect.height + this.halfImageSize) {
+      this.y = -this.halfImageSize;
+      this.x = Math.random() * this.effect.width;
+    }
+
+    if (this.y < this.initialYPosition)
+      this.vy = (Math.random() / 100) * this.imageSize;
+
+    if (this.y > this.initialYPosition)
+      this.vy = -(Math.random() / 100) * this.imageSize;
+
+    if (
+      this.y < this.initialYPosition * 0.98 &&
+      this.y < this.initialYPosition * 0.98
+    )
+      this.vy = 0;
   }
 
   reset() {
